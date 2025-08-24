@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EnemyControl : MonoBehaviour
@@ -8,11 +9,13 @@ public class EnemyControl : MonoBehaviour
     public Transform pointB;
     private UnityEngine.Vector3 targetPosition;
     private Rigidbody2D rb;
-
     private bool isDead = false;
+    public GameObject hitBox; // Reference to the HitBox child object
+    public GameObject enemyBody; // Reference to the EnemyBody child object
 
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         targetPosition = pointB.position; // Start moving towards point B
     }
 
@@ -57,7 +60,7 @@ public class EnemyControl : MonoBehaviour
         if (EnemyCol != null) EnemyCol.enabled = false;
 
         // Xoá enemy sau 2 giây
-        Destroy(gameObject, 2f);
+        Destroy(gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D other)

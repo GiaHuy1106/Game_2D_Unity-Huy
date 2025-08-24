@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.y, jumpForce);
             isGrounded = false; // Prevent double jumping
         }
     }
@@ -57,11 +57,14 @@ public class PlayerController : MonoBehaviour
             Destroy(gameObject); // Destroy player
             GameManager gameManager = FindAnyObjectByType<GameManager>();
             gameManager.GameOver(); // Trigger game over in GameManager
+            Debug.Log("Player hit enemy and game over");
         }
 
         if (collision.gameObject.CompareTag("MovingObject"))
         {
+            isGrounded = true;
             transform.SetParent(collision.transform); // Make the player a child of the moving object
+            Debug.Log("Player is grounded on moving object");
         }
     }
 
@@ -69,7 +72,9 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("MovingObject"))
         {
+            isGrounded = true;
             transform.SetParent(null); // Remove the player from being a child of the object
+            Debug.Log("Player exited moving object");
         }
     }
 
@@ -77,6 +82,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Coins"))
         {
+            Debug.Log("+1 coin");
             Destroy(collision.gameObject); // Destroy collectible
             GameManager gameManager = FindAnyObjectByType<GameManager>();
             gameManager.AddScore(1); // Add score in GameManager
@@ -84,12 +90,14 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("HitBox"))
         {
-            Destroy(collision.gameObject);
-            Collider2D playerCollider = GetComponent<Collider2D>();
-            if (playerCollider != null)
+            EnemyControl enemy = collision.GetComponentInParent<EnemyControl>();
+            if (enemy != null)
             {
-                playerCollider.enabled = false; // Disable the player's collider
+                enemy.Die(); // Call the Die method on the enemy                
             }
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.5f); // Bounce the player up slightly
+            Destroy(collision.gameObject); // Destroy the hitbox to prevent multiple triggers
+            Debug.Log("Enemy hitbox triggered, enemy should die");
         }
 
     }

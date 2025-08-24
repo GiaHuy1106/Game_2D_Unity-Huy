@@ -5,7 +5,7 @@ public class ObjectMove : MonoBehaviour
     [SerializeField] private float speed;
     public Transform pointA;
     public Transform pointB;
-    private UnityEngine.Vector3 targetPosition;
+    private Vector3 targetPosition;
     private Transform Player;
 
     void Start()
@@ -21,10 +21,10 @@ public class ObjectMove : MonoBehaviour
     private void objectMove()
     {
         // Move towards the target position
-        transform.position = UnityEngine.Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
         // Check if the object has reached the target position
-        if (UnityEngine.Vector3.Distance(transform.position, targetPosition) < 0.01f)
+        if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
         {
             if (targetPosition == pointB.position)
             {
@@ -41,7 +41,7 @@ public class ObjectMove : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-             collision.transform.SetParent(transform); // Remove the player from being a child of the object
+            collision.transform.SetParent(transform); // Make the player a child of the moving object to follow its movement
         }
     }
     
