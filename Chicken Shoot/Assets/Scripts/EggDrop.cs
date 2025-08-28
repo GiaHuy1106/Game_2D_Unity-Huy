@@ -25,16 +25,9 @@ public class EggDrop : MonoBehaviour
         {
             Quaternion rotation = Quaternion.Euler(0, 0, 0);
             var egg = Instantiate(Egg, transform.position, rotation);
-            yield return new WaitForSeconds(1.2f);
+            yield return new WaitForSeconds(2f);
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Plane"))
-        {
-            Destroy(collision.gameObject);
-            Destroy(gameObject);
-        }
-    }
+    
 }

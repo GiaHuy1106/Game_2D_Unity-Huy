@@ -14,7 +14,11 @@ public class BulletPrefarb : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector2.up * speed * Time.deltaTime);
+        DestroyBullet();
+    }
 
+    void DestroyBullet()
+    {
         if (transform.position.y > Camera.main.orthographicSize + 1)
         {
             Destroy(gameObject);

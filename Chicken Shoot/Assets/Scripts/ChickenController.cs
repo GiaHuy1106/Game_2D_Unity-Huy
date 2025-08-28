@@ -20,12 +20,12 @@ public class ChickenController : MonoBehaviour
         transform.position += Vector3.down * Speed * Time.deltaTime;
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.gameObject.CompareTag("Bullet"))
+        if (other.gameObject.CompareTag("Bullet"))
         {
-            Destroy(collision.gameObject); // Destroy bullet
-            Destroy(gameObject); // Destroy chicken
+            Destroy(gameObject);
+            Destroy(other.gameObject);
         }
     }
 

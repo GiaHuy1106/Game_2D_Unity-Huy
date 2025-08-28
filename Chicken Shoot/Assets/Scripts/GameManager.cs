@@ -1,32 +1,67 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public float spawnRate;
+    public float chickenSpawnRate;
+    public float giftSpawnRate;
     public GameObject chickenPrefab;
-    public float nextSpawnTime;
+    public GameObject giftPrefab;
+    public float spawnAreaWidth = 8f; // Độ rộng vùng sinh (trục x)
+    public float spawnAreaHeight = 6f; // Chiều cao vùng sinh (trục y)
+    public float nextChickenSpawnTime;
+    public float nextGiftSpawnTime;
+    public int blood = 3;
 
     void Start()
     {
-        //Chicken Spawn
-        nextSpawnTime = Time.time + spawnRate;
+        // Khởi tạo thời gian sinh
+        nextChickenSpawnTime = Time.time + chickenSpawnRate;
+        nextGiftSpawnTime = Time.time + giftSpawnRate;
     }
 
     // Update is called once per frame
     void Update()
     {
-        ChickenSpawn();
+        // Sinh gà ngẫu nhiên
+        if (Time.time >= nextChickenSpawnTime)
+        {
+            ChickenSpawn();
+            nextChickenSpawnTime = Time.time + chickenSpawnRate;
+        }
+
+        // Sinh quà ngẫu nhiên
+        if (Time.time >= nextGiftSpawnTime)
+        {
+            SpawnRandomGift();
+            nextGiftSpawnTime = Time.time + giftSpawnRate;
+        }
     }
 
-    void ChickenSpawn()
+    private void ChickenSpawn()
     {
-        if (Time.time >= nextSpawnTime)
+        //vị trí tương đương x, y, z
+        Vector3 spawnPosition = new Vector3(
+            Random.Range(-spawnAreaWidth, spawnAreaWidth),
+            6f,
+            transform.position.z);
+        Instantiate(chickenPrefab, spawnPosition, Quaternion.identity);
+    }
+
+    private void SpawnRandomGift()
+    {
+        Vector3 spawnPosition = new Vector3(
+           Random.Range(-spawnAreaWidth, spawnAreaWidth), // x
+            6f, // y
+            transform.position.z); // z
+        Instantiate(giftPrefab, spawnPosition, Quaternion.identity);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
         {
-            // Sinh đối tượng tại vị trí ngẫu nhiên trên trục x, giữ y và z cố định
-            Vector3 spawnPosition = new Vector3(Random.Range(-8f, 8f), 6f, transform.position.z);
-            Instantiate(chickenPrefab, spawnPosition, Quaternion.identity);
-            // Cập nhật thời gian sinh tiếp theo
-            nextSpawnTime = Time.time + spawnRate;
+            Debug.Log("hit ground");
         }
     }
 }
