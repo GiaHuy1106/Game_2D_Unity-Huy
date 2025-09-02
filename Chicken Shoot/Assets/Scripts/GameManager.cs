@@ -56,12 +56,4 @@ public class GameManager : MonoBehaviour
             transform.position.z); // z
         Instantiate(giftPrefab, spawnPosition, Quaternion.identity);
     }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            Debug.Log("hit ground");
-        }
-    }
 }

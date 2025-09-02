@@ -20,30 +20,21 @@ public class PlaneController : MonoBehaviour
     void Update()
     {
         PlaneMovement();
-        OnMouseDrag();
         Shoot();
     }
 
-    private void OnMouseDrag()
-    {
-        // Move with mouse
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0;
-        Vector2 direction = (mousePosition - transform.position).normalized;
-        rb.linearVelocity = direction.normalized * speed;
 
-        // Plane stop can't go out of screen
+    void PlaneMovement() // Move with keyboard
+    {
+        Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        rb.linearVelocity = moveInput.normalized * speed * Time.deltaTime;
+
+        //limit ship move inside the box
         Vector3 topLeft = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
         transform.position = new Vector3(
             Mathf.Clamp(transform.position.x, -topLeft.x, topLeft.x),
             Mathf.Clamp(transform.position.y, -topLeft.y, topLeft.y),
             0);
-    }
-
-    void PlaneMovement() // Move with keyboard
-    {
-        /*Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        rb.linearVelocity = moveInput * speed;*/
     }
 
     void Shoot()
@@ -52,8 +43,7 @@ public class PlaneController : MonoBehaviour
         {
             Quaternion rotation = Quaternion.Euler(0, 0, 0);
             Instantiate(BulletPrefarb[currentIndex], transform.position, rotation);
-        }
-
+        } 
     }
 
     void OnTriggerEnter2D(Collider2D collision)

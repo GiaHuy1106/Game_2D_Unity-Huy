@@ -1,18 +1,27 @@
+using System.Collections;
 using UnityEngine;
 
-public class eggDrop : MonoBehaviour
+public class eggPrefarb : MonoBehaviour
 {
-    public float speed;
+    public GameObject Egg;
     void Start()
     {
-
+        StartCoroutine(eggDrop());
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.down * speed * Time.deltaTime);
+
     }
-    
-    
+
+    private IEnumerator eggDrop()
+    {
+        while (true)
+        {
+            Quaternion rotation = Quaternion.Euler(0, 0, 0);
+            var egg = Instantiate(Egg, transform.position, rotation);
+            yield return new WaitForSeconds(2f);
+        }
+    }    
 }

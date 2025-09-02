@@ -13,7 +13,7 @@ public class BulletPrefarb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector2.up * speed * Time.deltaTime);
+        transform.Translate(Vector3 .up * speed * Time.deltaTime);
         DestroyBullet();
     }
 
