@@ -3,26 +3,19 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
-    public static BallController ballController;
+    public static BallController instance;
     public List<GameObject> ballLists;
-     public bool isBallAvailable = false; 
-
-    void Start()
+    void Awake()
     {
-        ballController = this;
+        instance = this;
     }
 
-    //if ball are not available then dont instantiate
     void Update()
     {
-         if (!isBallAvailable) 
-        {
-            ballcontroller();
-            isBallAvailable = true; 
-        }
+
     }
 
-    public GameObject ballcontroller()
+    public GameObject getRandomBall()
     {
         return Instantiate(ballLists[Random.Range(0,ballLists.Count)], Vector3.zero, new Quaternion());
     }
