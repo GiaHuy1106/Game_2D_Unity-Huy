@@ -7,17 +7,26 @@ public class BallShoot : MonoBehaviour
     void Start()
     {
         reloadBall();
+        changeBallToShootPos();
     }
 
     public void reloadBall()
     {
         GameObject ball = BallController.instance.getRandomBall();
-        ball.transform.parent = ballShoot.transform;
+        ball.transform.parent = ballReload.transform;
         ball.transform.localPosition = Vector3.zero;
-        Debug.Log("Ball color: " + ball.tag);
     }
 
-    void ShootBall()
+    public void changeBallToShootPos()
+    {
+        GameObject ball = ballReload.transform.GetChild(0).gameObject;
+        ball.transform.parent = ballShoot.transform;
+        ball.transform.localPosition = Vector3.zero;
+
+        reloadBall();
+    }    
+
+    public void ShootBall()
     {
         if (ballShoot.transform.childCount != 0)
         {
@@ -25,13 +34,21 @@ public class BallShoot : MonoBehaviour
             mousePos.z = 0;
 
             Vector3 direction = (mousePos - ballShoot.transform.GetChild(0).position).normalized;
+
+            ballShoot.transform.GetChild(0).GetComponent<BallScripts>().Direction = direction;
+            ballShoot.transform.GetChild(0).parent = null;
+
+            changeBallToShootPos();
         }
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            ShootBall();
+        }
     }
 
     

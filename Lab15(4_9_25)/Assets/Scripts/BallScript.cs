@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class BallScripts : MonoBehaviour
 {
-    public Vector3 direction;
-    public float speed;
+    public Vector3 Direction;
+    
     void Start()
     {
 
@@ -12,9 +12,9 @@ public class BallScripts : MonoBehaviour
 
     void Update()
     {
-        if (direction != Vector3.zero)
+        if (Direction != Vector3.zero)
         {
-            transform.Translate(direction * speed * Time.deltaTime);
+            transform.Translate(Direction * Time.deltaTime * 5f);
         }
     }
 
