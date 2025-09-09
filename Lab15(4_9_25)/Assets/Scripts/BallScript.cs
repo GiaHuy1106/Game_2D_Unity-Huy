@@ -18,5 +18,13 @@ public class BallScripts : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("wall"))
+        {
+            Debug.Log("hit");
+        }    
+    }
+
 
 }

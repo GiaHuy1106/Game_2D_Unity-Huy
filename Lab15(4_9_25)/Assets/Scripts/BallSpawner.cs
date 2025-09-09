@@ -1,45 +1,54 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class BallSpawner : MonoBehaviour
 {
     public float ballSize = 0.75f;
-    public int NumberOfBallInRow;
-
+    public int NumberOfBallInRow = 8;
     public Vector3 SpawnPos;
-
     GameObject[,] ListBall;
     int indexRow;
+
+    public float speed = 2f;
     void Start()
     {
         float height, width;
         GetScreenSize(out height, out width);
-        
-        NumberOfBallInRow = Mathf.FloorToInt(width / ballSize / 2);
 
         SpawnPos = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0));
-
-        StartCoroutine(LoopEach5s());
+        SpawnPos.z = 0;
 
         ListBall = new GameObject[1000, NumberOfBallInRow];
+
+        StartCoroutine(LoopEach5s());
     }
 
     
     void Update()
     {
-        
+        for (int row = 0; row < indexRow; row++)
+        {
+            for (int col = 0; col < NumberOfBallInRow; col++)
+            {
+                GameObject ball = ListBall[row, col];
+                if (ball != null)
+                {
+                    ball.transform.position += Vector3.down * speed * Time.deltaTime;
+                }
+            }
+        }
     }
 
     void GetScreenSize(out float height, out float width)
     {
         height = Camera.main.orthographicSize * 2;
         width = height * Screen.width/Screen.height;
-    }   
-    
+    }
+
     void SpawnRow()
     {
         Vector3 spawnPos = this.SpawnPos;
-        if(indexRow > 0)
+        if (indexRow > 0)
         {
             spawnPos.y = ListBall[indexRow - 1, 0].transform.position.y + ballSize;
         }
@@ -48,8 +57,16 @@ public class BallSpawner : MonoBehaviour
             spawnPos.y += ballSize;
         }
 
-        if(indexRow % 2 == 0)
-        {
+        // Tính chiều rộng của cả hàng
+        float rowWidth = (indexRow % 2 == 0)
+            ? NumberOfBallInRow * ballSize
+            : (NumberOfBallInRow - 1) * ballSize;
+
+        // Canh giữa toàn màn hình
+        spawnPos.x = -rowWidth / 2f + ballSize / 2f;
+
+        if (indexRow % 2 == 0)
+        {            
             for (int i = 0; i < NumberOfBallInRow; i++)
             {
                 GameObject ballNew = BallController.instance.getRandomBall();
@@ -58,17 +75,15 @@ public class BallSpawner : MonoBehaviour
                 spawnPos.x += ballSize;
             }
         }
-        else
+        else if (indexRow % 2 == 1)  // hàng lẻ
         {
-            spawnPos.x += ballSize / 2;
-
             for (int i = 0; i < NumberOfBallInRow - 1; i++)
             {
                 GameObject ballNew = BallController.instance.getRandomBall();
                 ballNew.transform.position = spawnPos;
                 ListBall[indexRow, i] = ballNew;
                 spawnPos.x += ballSize;
-            }
+            }  
         }
         indexRow++;
     }
@@ -78,7 +93,7 @@ public class BallSpawner : MonoBehaviour
         while (true)
         {
             SpawnRow();
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(2);
         }
     }
 }

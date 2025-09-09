@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BallController : MonoBehaviour
@@ -17,6 +17,6 @@ public class BallController : MonoBehaviour
 
     public GameObject getRandomBall()
     {
-        return Instantiate(ballLists[Random.Range(0,ballLists.Count)], Vector3.zero, new Quaternion());
+        return Instantiate(ballLists[Random.Range(0, ballLists.Count)], Vector2.zero, new Quaternion());
     }
 }
