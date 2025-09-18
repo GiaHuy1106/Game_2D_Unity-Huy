@@ -1,0 +1,4 @@
+repository "2D Mobile Game 2025-09-16_21-08-36/2D Mobile Game@18968301701308@cloud"
+  path "/"
+    br "/main"
+    co "/main"
